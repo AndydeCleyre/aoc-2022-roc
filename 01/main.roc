@@ -24,7 +24,7 @@ getTotals = \ledger ->
             |> Result.withDefault 0
             |> Num.add total
 
-main =
+partOne =
     "input.txt"
     |> getLedger
     |> Task.await \data ->
@@ -34,3 +34,22 @@ main =
         |> Result.withDefault 0
         |> Num.toStr
         |> Stdout.line
+
+partTwo =
+    "input.txt"
+    |> getLedger
+    |> Task.await \data ->
+        data
+        |> getTotals
+        |> List.sortDesc
+        |> List.takeFirst 3
+        |> List.walk 0 \sum, elfCalories ->
+            elfCalories
+            |> Num.add sum
+        |> Num.toStr
+        |> Stdout.line
+
+main =
+    partOne
+    |> Task.await \_ ->
+        partTwo
