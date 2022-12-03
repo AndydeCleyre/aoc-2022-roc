@@ -50,6 +50,7 @@ itemTypePriority = \itemType ->
         |> Str.graphemes
         |> List.findFirstIndex \letter ->
             letter == itemType
+
     if Result.isErr indexResult then
         crash "Uh oh"
     else
@@ -83,6 +84,7 @@ commonItemType = \rucksack ->
         |> Set.intersection rightItemTypes
         |> Set.toList
         |> List.first
+
     if Result.isErr result then
         crash "Uh oh"
     else
@@ -116,11 +118,13 @@ badgeItemType = \rucksackTriplet ->
         |> Result.withDefault ""
         |> Str.graphemes
         |> Set.fromList
-    result = typesA
+    result =
+        typesA
         |> Set.intersection typesB
         |> Set.intersection typesC
         |> Set.toList
         |> List.first
+
     if Result.isErr result then
         crash "Uh oh"
     else
