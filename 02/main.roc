@@ -14,32 +14,34 @@ getStrategy = \filepath ->
 
 scoreShape = \shape ->
     when shape is
-        Rock     -> 1
-        Paper    -> 2
+        Rock -> 1
+        Paper -> 2
         Scissors -> 3
 
 scoreOutcome = \outcome ->
     when outcome is
-        Win  -> 6
+        Win -> 6
         Lose -> 0
         Draw -> 3
 
-getOutcome = \{opponentShape, selfShape} ->
+getOutcome = \{ opponentShape, selfShape } ->
     when opponentShape is
         Rock ->
             when selfShape is
-                Rock     -> Draw
-                Paper    -> Win
+                Rock -> Draw
+                Paper -> Win
                 Scissors -> Lose
+
         Paper ->
             when selfShape is
-                Rock     -> Lose
-                Paper    -> Draw
+                Rock -> Lose
+                Paper -> Draw
                 Scissors -> Win
+
         Scissors ->
             when selfShape is
-                Rock     -> Win
-                Paper    -> Lose
+                Rock -> Win
+                Paper -> Lose
                 Scissors -> Draw
 
 lineToRound = \line ->
@@ -56,7 +58,8 @@ lineToRound = \line ->
             "Y" -> Paper
             "Z" -> Scissors
             _ -> crash "What is this shape code? on line: \(line)"
-    {opponentShape, selfShape}
+
+    { opponentShape, selfShape }
 
 lineToProperRound = \line ->
     codedShapes = Str.split line " "
@@ -70,16 +73,20 @@ lineToProperRound = \line ->
         when Result.withDefault (List.last codedShapes) "" is
             "X" ->
                 when opponentShape is
-                    Rock     -> Scissors
-                    Paper    -> Rock
+                    Rock -> Scissors
+                    Paper -> Rock
                     Scissors -> Paper
+
             "Y" -> opponentShape
-            "Z" -> when opponentShape is
-                Rock     -> Paper
-                Paper    -> Scissors
-                Scissors -> Rock
+            "Z" ->
+                when opponentShape is
+                    Rock -> Paper
+                    Paper -> Scissors
+                    Scissors -> Rock
+
             _ -> crash "What is this shape code? on line: \(line)"
-    {opponentShape, selfShape}
+
+    { opponentShape, selfShape }
 
 getRounds = \strategy ->
     strategy
@@ -99,10 +106,11 @@ scoreRounds = \rounds ->
         round
         |> getOutcome
         |> scoreOutcome
-        |> Num.add (
-            round.selfShape
-            |> scoreShape
-        )
+        |> Num.add
+            (
+                round.selfShape
+                |> scoreShape
+            )
         |> Num.add total
 
 partOne =
