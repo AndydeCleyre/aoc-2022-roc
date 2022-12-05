@@ -69,16 +69,11 @@ getRangePairs = \data ->
             line
             |> Str.split ","
             |> List.map rangeStrToRecord
-        rangeA =
-            pair
-            |> List.first
-            |> Result.withDefault { start: 0, end: 0 }
-        rangeB =
-            pair
-            |> List.last
-            |> Result.withDefault { start: 0, end: 0 }
         pairs
-        |> List.append { a: rangeA, b: rangeB }
+        |> List.append {
+            a: rangeOrDie (List.first pair),
+            b: rangeOrDie (List.last pair)
+        }
 
 rangeStrToRecord = \rangeStr ->
     startEnd =
@@ -99,11 +94,14 @@ rangeStrToRecord = \rangeStr ->
     { start, end }
 
 numOrDie = \result ->
-    if Result.isErr result then
-        crash "Uh oh"
-    else
-        result
-        |> Result.withDefault 0
+    when result is
+        Ok num -> num
+        Err _ -> crash "Uh oh"
+
+rangeOrDie = \result ->
+    when result is
+        Ok range -> range
+        Err _ -> crash "Uh oh"
 
 getData = \filepath ->
     filepath
